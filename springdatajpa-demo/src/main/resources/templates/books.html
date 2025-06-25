@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Books</title>
+    <style>
+        body { font-family: Arial; background: #f7f7f7; margin: 0; padding: 0; }
+        h1 { text-align: center; margin-top: 20px; }
+        form { background: #ffffff; padding: 20px; width: 80%; margin: 20px auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        label { display: block; margin: 10px 0 5px; }
+        input, select { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { background: #3498db; color: white; border: none; padding: 10px 15px; cursor: pointer; }
+        button:hover { background: #2980b9; }
+        table { width: 90%; margin: 20px auto; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { padding: 10px; text-align: center; border-bottom: 1px solid #ccc; }
+        th { background-color: #2c3e50; color: white; }
+        a.button-link { padding: 6px 12px; background: #e67e22; color: white; text-decoration: none; margin: 0 5px; }
+        a.button-link:hover { background: #d35400; }
+        .nav { text-align: center; margin: 15px; }
+        .nav a { text-decoration: none; margin: 0 10px; color: #2980b9; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>📘 Book Management</h1>
+
+<div class="nav">
+    <a href="/">🏠 Home</a>
+    <a href="/cart">🛒 Cart</a>
+    <a href="/orders/history">📜 Orders</a>
+</div>
+
+<form th:action="@{/books/save}" method="post" th:object="${book}">
+    <input type="hidden" th:field="*{id}"/>
+    
+    <label>Title</label>
+    <input type="text" th:field="*{title}" placeholder="Enter book title" required/>
+
+    <label>Price</label>
+    <input type="number" step="0.01" th:field="*{price}" placeholder="Enter price" required/>
+
+    <label>Author</label>
+    <select th:field="*{author}" required>
+        <option value="" disabled selected>Select Author</option>
+        <option th:each="author : ${authors}" th:value="${author}" th:text="${author.name}"/>
+    </select>
+
+    <label>Category</label>
+    <select th:field="*{category}" required>
+        <option value="" disabled selected>Select Category</option>
+        <option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat.name}"/>
+    </select>
+
+    <button type="submit" th:text="${book.id == null ? 'Add Book' : 'Update Book'}"/>
+</form>
+
+<table>
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Category</th>
+            <th>Price (₹)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="b : ${books}">
+            <td th:text="${b.title}"></td>
+            <td th:text="${b.author.name}"></td>
+            <td th:text="${b.category.name}"></td>
+            <td th:text="${b.price}"></td>
+            <td>
+                <a th:href="@{'/books/edit/' + ${b.id}}" class="button-link">Edit</a>
+                <a th:href="@{'/books/delete/' + ${b.id}}" class="button-link" onclick="return confirm('Delete this book?')">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

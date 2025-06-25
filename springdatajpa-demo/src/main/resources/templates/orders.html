@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order History</title>
+    <style>
+        body { font-family: Arial; background: #f9f9f9; margin: 0; padding: 0; }
+        h1 { text-align: center; margin: 20px; }
+        .order-box { width: 80%; margin: 20px auto; padding: 20px; background: #fff; border-left: 5px solid #3498db; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+        .order-header { font-weight: bold; color: #2c3e50; }
+        ul { margin: 10px 0; padding-left: 20px; }
+        li { margin-bottom: 5px; }
+        .nav { text-align: center; margin: 20px; }
+        .nav a { text-decoration: none; margin: 0 10px; color: #2980b9; font-weight: bold; }
+        .empty { text-align: center; font-size: 18px; color: #888; }
+    </style>
+</head>
+<body>
+
+<h1>📜 Order History</h1>
+
+<div class="nav">
+    <a href="/">← Back to Bookstore</a>
+    <a href="/cart">🛒 Go to Cart</a>
+</div>
+
+<div th:if="${#lists.isEmpty(orders)}" class="empty">
+    No orders yet. <a href="/">Start shopping now!</a>
+</div>
+
+<div th:each="order : ${orders}" class="order-box">
+    <div class="order-header">
+        Order ID: <span th:text="${order.id}"/> | Date: <span th:text="${#temporals.format(order.orderedAt, 'dd MMM yyyy HH:mm')}"/>
+    </div>
+    <ul>
+        <li th:each="book : ${order.books}" th:text="'📖 ' + ${book.title} + ' by ' + ${book.author.name}"/>
+    </ul>
+</div>
+
+</body>
+</html>

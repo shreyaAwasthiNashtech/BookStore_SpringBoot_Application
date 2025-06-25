@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bookstore | Home</title>
+    <style>
+        body { font-family: Arial; background: #f0f0f5; margin: 0; padding: 0; }
+        h1 { text-align: center; margin: 20px; }
+        .book-table { width: 90%; margin: 20px auto; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background-color: #34495e; color: white; }
+        form { display: flex; justify-content: center; gap: 10px; }
+        input[type="number"] { width: 50px; padding: 4px; }
+        button { padding: 5px 10px; background: #2ecc71; color: white; border: none; cursor: pointer; }
+        button:hover { background: #27ae60; }
+        .nav { text-align: center; margin: 20px; }
+        .nav a { text-decoration: none; margin: 0 10px; color: #2980b9; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>📚 Welcome to the Bookstore</h1>
+
+<div class="nav">
+    <a href="/cart">🛒 View Cart</a>
+    <a href="/orders/history">📜 Order History</a>
+</div>
+
+<table class="book-table">
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Add to Cart</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}">Book Title</td>
+        <td th:text="${book.author.name}">Author Name</td>
+        <td th:text="${book.category.name}">Category</td>
+        <td th:text="'₹' + ${book.price}">Price</td>
+        <td>
+            <form th:action="@{/cart/add/{id}(id=${book.id})}" method="post">
+                <input type="number" name="quantity" value="1" min="1"/>
+                <button type="submit">Add</button>
+            </form>
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

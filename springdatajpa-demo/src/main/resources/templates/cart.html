@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Cart</title>
+    <style>
+        body { font-family: Arial; background: #fffdf7; margin: 0; padding: 0; }
+        h1 { text-align: center; margin-top: 20px; }
+        table { width: 80%; margin: 20px auto; border-collapse: collapse; box-shadow: 0 2px 5px rgba(0,0,0,0.1); background: white; }
+        th, td { padding: 12px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background-color: #8e44ad; color: white; }
+        button { background: #27ae60; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 20px auto; display: block; }
+        button:hover { background: #219150; }
+        .empty { text-align: center; font-size: 18px; margin: 30px; color: #888; }
+        .nav { text-align: center; margin: 20px; }
+        .nav a { text-decoration: none; margin: 0 10px; color: #2980b9; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>🛒 Your Cart</h1>
+
+<div class="nav">
+    <a href="/">← Back to Bookstore</a>
+    <a href="/orders/history">📜 Order History</a>
+</div>
+
+<div th:if="${#lists.isEmpty(cartItems)}" class="empty">
+    Your cart is empty. <a href="/">Go add some books!</a>
+</div>
+
+<div th:unless="${#lists.isEmpty(cartItems)}">
+    <table>
+        <tr>
+            <th>Book</th>
+            <th>Author</th>
+            <th>Quantity</th>
+            <th>Price</th>
+        </tr>
+        <tr th:each="item : ${cartItems}">
+            <td th:text="${item.book.title}">Book</td>
+            <td th:text="${item.book.author.name}">Author</td>
+            <td th:text="${item.quantity}">Qty</td>
+            <td th:text="'₹' + ${item.book.price * item.quantity}">Total</td>
+        </tr>
+    </table>
+
+    <form th:action="@{/orders/place}" method="post">
+        <button type="submit">✅ Place Order</button>
+    </form>
+</div>
+
+</body>
+</html>
